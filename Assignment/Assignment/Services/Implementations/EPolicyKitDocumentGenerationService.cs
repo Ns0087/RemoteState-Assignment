@@ -77,6 +77,7 @@ namespace Assignment.Services.Implementations
                 content = content.Replace("{{Occupation}}", user.Occupation);
                 content = content.Replace("{{ProductCode}}", user.ProductCode);
                 content = content.Replace("{{PolicyExpiryDate}}", Convert.ToString(user.PolicyExpiryDate));
+                content = content.Replace("{{PolicyNumber}}", Convert.ToString(user.PolicyNumber));
 
                 return content;
             }
@@ -145,6 +146,8 @@ namespace Assignment.Services.Implementations
             };
 
             bodyBuilder.Attachments.Add("Policy.pdf", attachment, new ContentType(".pdf", System.Net.Mime.MediaTypeNames.Text.Plain));
+
+            message.Body = bodyBuilder.ToMessageBody();
 
             SmtpClient smtpClient= new SmtpClient();
             smtpClient.Connect("smtp.gmail.com", 587, false);
