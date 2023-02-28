@@ -8,6 +8,7 @@ using PuppeteerSharp;
 using Assignment.DAL.Entities;
 using MailKit.Net.Smtp;
 using MailKit;
+using MimeKit;
 
 namespace Assignment.Services.Implementations
 {
@@ -128,7 +129,28 @@ namespace Assignment.Services.Implementations
 
         private async Task sendEmailAsync(byte[] attachment, string name, string email)
         {
+            var message = new MimeMessage();
+            message.From.Add( new MailboxAddress("Nitin", "mrwanderer30@gmail.com"));
+            message.To.Add(new MailboxAddress(name, email));
 
+            message.Subject = "Health Policy";
+
+            string textBody = "Dear " + name + ", ";
+            textBody += "\nThanks for choosing our health Policy. \nPlease do find the attached file which contains the details of the policy.";
+            textBody += "\nWith Regards";
+
+            BodyBuilder bodyBuilder = new BodyBuilder()
+            {
+                TextBody = textBody
+            };
+
+            bodyBuilder.Attachments.Add("Policy.pdf", attachment, new ContentType(".pdf", System.Net.Mime.MediaTypeNames.Text.Plain));
+
+            SmtpClient smtpClient= new SmtpClient();
+            smtpClient.Connect("smtp.gmail.com", 587, false);
+            smtpClient.Authenticate("mrwanderer30@gmail.com", "htmhwsrrzwodaifq");
+            await smtpClient.SendAsync(message);
+            smtpClient.Disconnect(true);
         }
 
 
