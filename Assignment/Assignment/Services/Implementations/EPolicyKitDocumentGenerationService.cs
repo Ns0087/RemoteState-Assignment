@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using PuppeteerSharp.Media;
 using PuppeteerSharp;
 using Assignment.DAL.Entities;
+using MailKit.Net.Smtp;
+using MailKit;
 
 namespace Assignment.Services.Implementations
 {
@@ -24,7 +26,7 @@ namespace Assignment.Services.Implementations
 
         public async Task<int> EPolicyKitDocumentGenerationServiceAsync(DetailsModel details)
         {
-
+            int result = 0;
             var user = await _userRepository.GetUserByDetailsAsync(details);
             if(user != null)
             {
@@ -32,12 +34,15 @@ namespace Assignment.Services.Implementations
                 var content = ContentSetter(template, user);
 
                 var document =  await CreateDocument(content, user);
-                
 
-                return await AddDocument(document);
+                result =  await AddDocument(document);
+
+                if(result > 0 && document.Content != null && user.EmailAddress != null) {
+                    await sendEmailAsync(document.Content, user.Name, user.EmailAddress);
+                }
             }
 
-            return 0;
+            return result;
         }
 
         private static async Task<byte[]> HtmlToPdf(string html)
@@ -119,6 +124,11 @@ namespace Assignment.Services.Implementations
                 }
             }
             return 0;
+        }
+
+        private async Task sendEmailAsync(byte[] attachment, string name, string email)
+        {
+
         }
 
 
