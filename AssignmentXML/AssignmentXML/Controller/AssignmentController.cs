@@ -1,4 +1,5 @@
-﻿using AssignmentXML.Services.Implementations;
+﻿using AssignmentXML.Models.ResponseViewModels;
+using AssignmentXML.Services.Implementations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,9 @@ namespace AssignmentXML.Controller
         }
 
         [HttpGet]
-        public string xmlToJson()
+        public async Task<JsonModel> xmlToJson()
         {
-            return _jsonService.XmlToJson();
+            return await _jsonService.JsonResponse();
         }
     }
 }
