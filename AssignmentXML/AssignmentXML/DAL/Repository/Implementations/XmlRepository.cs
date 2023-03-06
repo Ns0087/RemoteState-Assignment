@@ -13,10 +13,14 @@ namespace AssignmentXML.DAL.Repository.Implementations
         {
             _dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
         }
-        public async Task<XmlTemplate> GetXmlByCode(string code)
+        public async Task<string> GetXmlByCode(string code)
         {
-            var template = await _dbContext.Templates.FirstOrDefaultAsync(tmp => tmp.Code == code);
-            return template;
+            var template = await _dbContext.Templates.FirstOrDefaultAsync(tmp => tmp.Code == code && tmp.isDeleted == false);
+            if(template != null) {
+                return template.Xml;
+
+            }
+            return null;
         }
     }
 }
