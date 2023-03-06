@@ -20,7 +20,7 @@ namespace AssignmentXML.Controller
         [HttpGet]
         public async Task<string> xmlToJson()
         {
-            return await _jsonService.XmlToJson();
+            return await _jsonService.JsonResponse();
         }
     }
 }

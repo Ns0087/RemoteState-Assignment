@@ -25,13 +25,13 @@ namespace AssignmentXML.Services.Implementations
             if(xml != null)
             {
                 var doc = XDocument.Parse(xml);
-                return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.None, omitRootObject: true);
+                return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.Indented, omitRootObject: true);
             }
 
             return null;
         }
 
-        public async Task<JsonModel> JsonResponse()
+        public async Task<string> JsonResponse()
         {
             var json = await XmlToJson();
 
@@ -45,10 +45,12 @@ namespace AssignmentXML.Services.Implementations
                     Body = jsonSetter(json)
                 };
 
-                return jsonResponse;
+                string jsonObject = Newtonsoft.Json.JsonConvert.SerializeObject(jsonResponse, Newtonsoft.Json.Formatting.Indented);
+
+                return jsonSetter(json);
             }
 
-            return new JsonModel();
+            return null;
         }
 
         private static string jsonSetter(string json)
