@@ -45,9 +45,9 @@ namespace AssignmentXML.Services.Implementations
                     Body = jsonSetter(json)
                 };
 
-                string jsonObject = Newtonsoft.Json.JsonConvert.SerializeObject(jsonResponse, Newtonsoft.Json.Formatting.Indented);
+                var jsonObject = Newtonsoft.Json.JsonConvert.SerializeObject(jsonResponse, Newtonsoft.Json.Formatting.Indented);
 
-                return jsonSetter(json);
+                return jsonObject;
             }
 
             return null;
@@ -58,6 +58,7 @@ namespace AssignmentXML.Services.Implementations
             string result = null;
             if(json != null)
             {
+
                 result = json.Replace("\"ADDITIONAL_FIELDS\"", "userDetails");
                 result = result.Replace("ZPRDTYP", "ProductType");
                 result = result.Replace("RSTERM", "RiskTerm");
