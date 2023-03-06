@@ -2,6 +2,7 @@
 {
     public interface IjsonService
     {
-        public string XmlToJson();
+        public Task<string> XmlToJson();
+
     }
 }

@@ -11,6 +11,6 @@ namespace AssignmentXML.Models.ResponseViewModels
 
         public string? Code { get; set; }
 
-        public JsonElement MyProperty { get; set; }
+        public JsonElement Body { get; set; }
     }
 }

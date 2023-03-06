@@ -5,6 +5,7 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using System.Xml;
 using AssignmentXML.Services.Interfaces;
+using AssignmentXML.Models.ResponseViewModels;
 
 namespace AssignmentXML.Services.Implementations
 {
@@ -16,11 +17,39 @@ namespace AssignmentXML.Services.Implementations
             _repository = serviceProvider.GetRequiredService<IXmlRepository>();
         }
 
-        public string XmlToJson()
+        public async Task<string> XmlToJson()
         {
-            string xml = @"<Invoice>\r\n    <Timestamp>1/1/2017 00:01</Timestamp>\r\n    <CustNumber>12345</CustNumber>\r\n    <AcctNumber>54321</AcctNumber>\r\n</Invoice>\";
-            var doc = XDocument.Parse(xml);
-            return JsonConvert.SerializeXNode(doc);
+            string xml = await _repository.GetXmlByCode("XML101");
+
+            if(xml != null)
+            {
+                var doc = XDocument.Parse(xml);
+                return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.Indented, omitRootObject: true);
+            }
+
+            return null;
         }
+
+        public async Task<JsonModel> JsonResponse()
+        {
+            var json = XmlToJson();
+
+            if(json != null)
+            {
+                JsonModel jsonResponse = new JsonModel()
+                {
+                    TimeStamp = DateTime.Now,
+                    Message = "success",
+                    Code = "200",
+                    Body = ""
+                };
+
+                return jsonResponse;
+            }
+
+            return new JsonModel();
+        }
+
+
     }
 }
