@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Xml;
 using AssignmentXML.Services.Interfaces;
 using AssignmentXML.Models.ResponseViewModels;
+using Microsoft.Extensions.Primitives;
 
 namespace AssignmentXML.Services.Implementations
 {
@@ -32,7 +33,7 @@ namespace AssignmentXML.Services.Implementations
 
         public async Task<JsonModel> JsonResponse()
         {
-            var json = XmlToJson();
+            var json = await XmlToJson();
 
             if(json != null)
             {
@@ -41,7 +42,7 @@ namespace AssignmentXML.Services.Implementations
                     TimeStamp = DateTime.Now,
                     Message = "success",
                     Code = "200",
-                    Body = ""
+                    Body = jsonSetter(json)
                 };
 
                 return jsonResponse;
@@ -50,6 +51,15 @@ namespace AssignmentXML.Services.Implementations
             return new JsonModel();
         }
 
+        private static string jsonSetter(string json)
+        {
+            string result = null;
+            if(json != null)
+            {
+                result = json.Replace("ADDITIONAL_FIELDS", "userDetails");
+            }
 
+            return result;
+        }
     }
 }
