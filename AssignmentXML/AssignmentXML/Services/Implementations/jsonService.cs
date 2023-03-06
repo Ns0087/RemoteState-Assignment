@@ -25,7 +25,7 @@ namespace AssignmentXML.Services.Implementations
             if(xml != null)
             {
                 var doc = XDocument.Parse(xml);
-                return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.Indented, omitRootObject: true);
+                return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.None, omitRootObject: true);
             }
 
             return null;
@@ -56,7 +56,17 @@ namespace AssignmentXML.Services.Implementations
             string result = null;
             if(json != null)
             {
-                result = json.Replace("ADDITIONAL_FIELDS", "userDetails");
+                result = json.Replace("\"ADDITIONAL_FIELDS\"", "userDetails");
+                result = result.Replace("ZPRDTYP", "ProductType");
+                result = result.Replace("RSTERM", "RiskTerm");
+                result = result.Replace("PMTERM", "PremiumTerm");
+                result = result.Replace("PAYMMETH", "PaymentMethod");
+                result = result.Replace("PAYFREQ", "PaymentFrequency");
+                result = result.Replace("RCDDATE", "RiskCommencementDate");
+                result = result.Replace("LASEX", "LifeAssuredGender");
+                result = result.Replace("LADOB", "LifeAssuredDateOfBirth");
+                result = result.Replace("LACRTBL", "LifeAssuredComponentCode");
+                result = result.Replace("LAINSPR", "LifeAssuredInstallmentPremium");
             }
 
             return result;

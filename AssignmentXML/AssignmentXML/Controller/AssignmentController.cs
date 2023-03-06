@@ -1,5 +1,6 @@
 ﻿using AssignmentXML.Models.ResponseViewModels;
 using AssignmentXML.Services.Implementations;
+using AssignmentXML.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,17 +10,17 @@ namespace AssignmentXML.Controller
     [ApiController]
     public class AssignmentController : ControllerBase
     {
-        private readonly jsonService _jsonService;
+        private readonly IjsonService _jsonService;
 
         public AssignmentController(IServiceProvider serviceProvider)
         {
-            _jsonService = serviceProvider.GetRequiredService<jsonService>();
+            _jsonService = serviceProvider.GetRequiredService<IjsonService>();
         }
 
         [HttpGet]
-        public async Task<JsonModel> xmlToJson()
+        public async Task<string> xmlToJson()
         {
-            return await _jsonService.JsonResponse();
+            return await _jsonService.XmlToJson();
         }
     }
 }
