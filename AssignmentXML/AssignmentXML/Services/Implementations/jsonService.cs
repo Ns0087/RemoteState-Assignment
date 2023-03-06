@@ -1,12 +1,11 @@
 ﻿using AssignmentXML.DAL.Repository.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Xml.Linq;
-using System.Text.Json;
 using Newtonsoft.Json;
-using System.Xml;
 using AssignmentXML.Services.Interfaces;
 using AssignmentXML.Models.ResponseViewModels;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json.Linq;
 
 namespace AssignmentXML.Services.Implementations
 {
@@ -45,7 +44,7 @@ namespace AssignmentXML.Services.Implementations
                     Body = jsonSetter(json)
                 };
 
-                var jsonObject = Newtonsoft.Json.JsonConvert.SerializeObject(jsonResponse, Newtonsoft.Json.Formatting.Indented);
+                var jsonObject = JsonConvert.SerializeObject(jsonResponse, Formatting.Indented);
 
                 return jsonObject;
             }
@@ -53,9 +52,9 @@ namespace AssignmentXML.Services.Implementations
             return null;
         }
 
-        private static string jsonSetter(string json)
+        private static object jsonSetter(string json)
         {
-            string result = null;
+            string result = "";
             if(json != null)
             {
 
@@ -72,7 +71,7 @@ namespace AssignmentXML.Services.Implementations
                 result = result.Replace("LAINSPR", "LifeAssuredInstallmentPremium");
             }
 
-            return result;
+            return JObject.Parse(result);
         }
     }
 }
