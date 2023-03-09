@@ -6,6 +6,6 @@ namespace AssignmentXML.Services.Interfaces
     {
         public Task<string> XmlToJson();
 
-        public object jsonSetter(string json);
+        public Task<object> JsonSetter(string json);
     }
 }

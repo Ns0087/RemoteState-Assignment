@@ -22,7 +22,7 @@ namespace AssignmentXML.Controller
         public async Task<string> xmlToJson()
         {
             var json = await _jsonService.XmlToJson();
-
+            var responseBody = await _jsonService.JsonSetter(json);
             try
             {
                 JsonModel jsonResponse = new JsonModel()
@@ -30,7 +30,7 @@ namespace AssignmentXML.Controller
                     TimeStamp = DateTime.Now,
                     Message = "success",
                     Code = "200",
-                    Body = _jsonService.jsonSetter(json)
+                    Body = responseBody
                 };
 
                 var jsonObject = JsonConvert.SerializeObject(jsonResponse, Formatting.Indented);

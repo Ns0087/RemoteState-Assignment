@@ -1,14 +1,18 @@
 ﻿using AssignmentXML.DAL.Repository.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Xml.Linq;
-using Newtonsoft.Json;
+using System.Text.Json;
+using Newtonsoft.Json.Serialization;
 using AssignmentXML.Services.Interfaces;
 using AssignmentXML.Models.ResponseViewModels;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System;
 
 namespace AssignmentXML.Services.Implementations
 {
+
     public class jsonService : IjsonService
     {
         private readonly IXmlRepository _repository;
@@ -21,13 +25,25 @@ namespace AssignmentXML.Services.Implementations
         {
             string xml = await _repository.GetXmlByCode("XML101");
 
-            if(xml != null)
+            if (xml != null)
             {
                 var doc = XDocument.Parse(xml);
-                return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.Indented, omitRootObject: true);
+                return JsonConvert.SerializeXNode(doc, Formatting.Indented);
             }
 
             return null;
+        }
+
+        public async Task<object> JsonSetter(string json)
+        {
+            if (json == null) return null;
+
+            //var obj = JObject.Parse(json);
+
+            var jObject = JsonConvert.DeserializeObject<Information>(json);
+
+
+            return jObject;
         }
 
         //public async Task<string> JsonResponse()
@@ -52,26 +68,25 @@ namespace AssignmentXML.Services.Implementations
         //    return null;
         //}
 
-        public object jsonSetter(string json)
-        {
-            string result = "";
-            if(json != null)
-            {
 
-                result = json.Replace("\"ADDITIONAL_FIELDS\"", "userDetails");
-                result = result.Replace("ZPRDTYP", "ProductType");
-                result = result.Replace("RSTERM", "RiskTerm");
-                result = result.Replace("PMTERM", "PremiumTerm");
-                result = result.Replace("PAYMMETH", "PaymentMethod");
-                result = result.Replace("PAYFREQ", "PaymentFrequency");
-                result = result.Replace("RCDDATE", "RiskCommencementDate");
-                result = result.Replace("LASEX", "LifeAssuredGender");
-                result = result.Replace("LADOB", "LifeAssuredDateOfBirth");
-                result = result.Replace("LACRTBL", "LifeAssuredComponentCode");
-                result = result.Replace("LAINSPR", "LifeAssuredInstallmentPremium");
-            }
+        //private static Dictionary<string, string> Mappings()
+        //{
+        //    var mappings = new Dictionary<string, string>
+        //    {
+        //        { "ADDITIONAL_FIELDS", "userDetails" },
+        //        { "ZPRDTYP", "ProductType" },
+        //        { "RSTERM", "RiskTerm" },
+        //        { "PMTERM", "PremiumTerm" },
+        //        { "PAYMMETH", "PaymentMethod" },
+        //        { "PAYFREQ", "PaymentFrequency" },
+        //        { "RCDDATE", "RiskCommencementDate" },
+        //        { "LASEX", "LifeAssuredGender" },
+        //        { "LADOB", "LifeAssuredDateOfBirth" },
+        //        { "LACRTBL", "LifeAssuredComponentCode" },
+        //        { "LAINSPR", "LifeAssuredInstallmentPremium" },
+        //    };
 
-            return JObject.Parse(result);
-        }
+        //    return mappings;
+        //}
     }
 }
