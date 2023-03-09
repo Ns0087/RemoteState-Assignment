@@ -5,7 +5,6 @@ namespace AssignmentXML.Services.Interfaces
     public interface IjsonService
     {
         public Task<string> XmlToJson();
-        public Task<string> JsonResponse();
 
         public object jsonSetter(string json);
     }
