@@ -30,29 +30,29 @@ namespace AssignmentXML.Services.Implementations
             return null;
         }
 
-        public async Task<string> JsonResponse()
-        {
-            var json = await XmlToJson();
+        //public async Task<string> JsonResponse()
+        //{
+        //    var json = await XmlToJson();
 
-            if(json != null)
-            {
-                JsonModel jsonResponse = new JsonModel()
-                {
-                    TimeStamp = DateTime.Now,
-                    Message = "success",
-                    Code = "200",
-                    Body = jsonSetter(json)
-                };
+        //    if(json != null)
+        //    {
+        //        JsonModel jsonResponse = new JsonModel()
+        //        {
+        //            TimeStamp = DateTime.Now,
+        //            Message = "success",
+        //            Code = "200",
+        //            Body = jsonSetter(json)
+        //        };
 
-                var jsonObject = JsonConvert.SerializeObject(jsonResponse, Formatting.Indented);
+        //        var jsonObject = JsonConvert.SerializeObject(jsonResponse, Formatting.Indented);
 
-                return jsonObject;
-            }
+        //        return jsonObject;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
-        private static object jsonSetter(string json)
+        public object jsonSetter(string json)
         {
             string result = "";
             if(json != null)
