@@ -4,6 +4,7 @@ using AssignmentXML.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AssignmentXML.Controller
 {
@@ -11,20 +12,23 @@ namespace AssignmentXML.Controller
     [ApiController]
     public class AssignmentController : ControllerBase
     {
-        private readonly IjsonService _jsonService;
+        private readonly IJsonDeserializeService _jsonService;
 
         public AssignmentController(IServiceProvider serviceProvider)
         {
-            _jsonService = serviceProvider.GetRequiredService<IjsonService>();
+            _jsonService = serviceProvider.GetRequiredService<IJsonDeserializeService>();
         }
 
         [HttpGet]
-        public async Task<string> xmlToJson()
+        public async Task<object> xmlToJson()
         {
-            var json = await _jsonService.XmlToJson();
+            var json = await _jsonService.XmlToJsonString();
             var responseBody = await _jsonService.JsonSetter(json);
+
             try
             {
+                //return Ok(responseBody.Info);
+
                 JsonModel jsonResponse = new JsonModel()
                 {
                     TimeStamp = DateTime.Now,
@@ -33,9 +37,12 @@ namespace AssignmentXML.Controller
                     Body = responseBody
                 };
 
-                var jsonObject = JsonConvert.SerializeObject(jsonResponse, Formatting.Indented);
+                //var jsonString = JsonConvert.SerializeObject(jsonResponse);
+                //var response = JObject.Parse(jsonString);
 
-                return jsonObject;
+                Console.WriteLine(jsonResponse.Body);
+
+                return jsonResponse;
             }
             catch (Exception ex)
             {

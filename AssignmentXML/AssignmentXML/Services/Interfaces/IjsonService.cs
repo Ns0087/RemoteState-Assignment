@@ -2,10 +2,10 @@
 
 namespace AssignmentXML.Services.Interfaces
 {
-    public interface IjsonService
+    public interface IJsonDeserializeService
     {
-        public Task<string> XmlToJson();
+        public Task<string> XmlToJsonString();
 
-        public Task<object> JsonSetter(string json);
+        public Task<User> JsonSetter(string json);
     }
 }

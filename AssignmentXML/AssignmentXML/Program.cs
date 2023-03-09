@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddScoped<IXmlRepository, XmlRepository>();
-builder.Services.AddTransient<IjsonService, jsonService>();
+builder.Services.AddTransient<IJsonDeserializeService, JsonDeserializeService>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
