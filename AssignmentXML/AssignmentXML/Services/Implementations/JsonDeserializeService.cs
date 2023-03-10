@@ -9,6 +9,8 @@ using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace AssignmentXML.Services.Implementations
 {
@@ -21,9 +23,9 @@ namespace AssignmentXML.Services.Implementations
             _repository = serviceProvider.GetRequiredService<IXmlRepository>();
         }
 
-        public async Task<string> XmlToJsonString()
+        public async Task<string> XmlToJsonStringAsync()
         {
-            string xml = await _repository.GetXmlByCode("XML101");
+            string xml = await _repository.GetXmlByCodeAsync("XML101");
 
             if (xml != null)
             {
@@ -34,13 +36,23 @@ namespace AssignmentXML.Services.Implementations
             return null;
         }
 
-        public async Task<User> JsonSetter(string json)
+        public async Task<User> JsonSetterAsync(string json)
         {
             if (json == null) return null;
 
             //var obj = JObject.Parse(json);
 
             var jObject = JsonConvert.DeserializeObject<User>(json);
+
+            //var Claims = new List<Claim> {
+            //    new Claim(ClaimTypes.Name, "admin"),
+            //    new Claim(ClaimTypes.Email, "admin@gmail.com")
+            //};
+
+            //var identity = new ClaimsIdentity(Claims, "MyCokieAuthentication");
+
+            //var ClaimsPrincipal = new ClaimsPrincipal(identity);
+
 
             return jObject;
         }

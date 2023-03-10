@@ -4,8 +4,8 @@ namespace AssignmentXML.Services.Interfaces
 {
     public interface IJsonDeserializeService
     {
-        public Task<string> XmlToJsonString();
+        public Task<string> XmlToJsonStringAsync();
 
-        public Task<User> JsonSetter(string json);
+        public Task<User> JsonSetterAsync(string json);
     }
 }

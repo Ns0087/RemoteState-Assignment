@@ -20,10 +20,10 @@ namespace AssignmentXML.Controller
         }
 
         [HttpGet]
-        public async Task<object> xmlToJson()
+        public async Task<object> xmlToJsonAsync()
         {
-            var json = await _jsonService.XmlToJsonString();
-            var responseBody = await _jsonService.JsonSetter(json);
+            var json = await _jsonService.XmlToJsonStringAsync();
+            var responseBody = await _jsonService.JsonSetterAsync(json);
 
             try
             {
@@ -39,8 +39,6 @@ namespace AssignmentXML.Controller
 
                 //var jsonString = JsonConvert.SerializeObject(jsonResponse);
                 //var response = JObject.Parse(jsonString);
-
-                Console.WriteLine(jsonResponse.Body);
 
                 return jsonResponse;
             }

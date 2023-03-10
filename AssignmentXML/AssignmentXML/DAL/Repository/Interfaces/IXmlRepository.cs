@@ -4,6 +4,6 @@ namespace AssignmentXML.DAL.Repository.Interfaces
 {
     public interface IXmlRepository
     {
-        public Task<string> GetXmlByCode(string code);
+        public Task<string> GetXmlByCodeAsync(string code);
     }
 }

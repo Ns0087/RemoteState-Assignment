@@ -9,7 +9,7 @@ namespace AssignmentXML.Models.ResponseViewModels
     {
         [XmlElement("ADDITIONAL_FIELDS")]
         [JsonProperty("ADDITIONAL_FIELDS")]
-        public List<UserDetails> userDetails { get; set; }
+        public List<UserDetails>? userDetails { get; set; }
     }
 
     public class UserDetails
