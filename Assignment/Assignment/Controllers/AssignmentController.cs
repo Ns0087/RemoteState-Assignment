@@ -24,6 +24,7 @@ namespace Assignment.Controllers
 
         // POST api/<AssignmentController>
         [HttpPost]
+        [Route("[action]")]
         public async Task<string> Post(DetailsModel details)
         {
             if (await _services.EPolicyKitDocumentGenerationServiceAsync(details) > 0)

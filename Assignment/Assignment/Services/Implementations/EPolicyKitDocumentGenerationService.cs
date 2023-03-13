@@ -9,6 +9,7 @@ using Assignment.DAL.Entities;
 using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
+using Hangfire;
 
 namespace Assignment.Services.Implementations
 {
@@ -39,7 +40,12 @@ namespace Assignment.Services.Implementations
                 result =  await AddDocument(document);
 
                 if(result > 0 && document.Content != null && user.EmailAddress != null) {
-                    await sendEmailAsync(document.Content, user.Name, user.EmailAddress);
+
+                    RecurringJob.AddOrUpdate(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress), Cron.Weekly(DayOfWeek.Monday, 2, 30));
+
+                    //BackgroundJob.Enqueue(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress));
+
+                    //await sendEmailAsync(document.Content, user.Name, user.EmailAddress);
                 }
             }
 
@@ -128,7 +134,7 @@ namespace Assignment.Services.Implementations
             return 0;
         }
 
-        private async Task sendEmailAsync(byte[] attachment, string name, string email)
+        public async Task sendEmailAsync(byte[] attachment, string name, string email)
         {
             var message = new MimeMessage();
             message.From.Add( new MailboxAddress("Nitin", "mrwanderer30@gmail.com"));
@@ -152,7 +158,8 @@ namespace Assignment.Services.Implementations
             SmtpClient smtpClient= new SmtpClient();
             smtpClient.Connect("smtp.gmail.com", 587, false);
             smtpClient.Authenticate("mrwanderer30@gmail.com", "htmhwsrrzwodaifq");
-            await smtpClient.SendAsync(message);
+            var res = await smtpClient.SendAsync(message);
+            await Console.Out.WriteLineAsync(res);
             smtpClient.Disconnect(true);
         }
 
