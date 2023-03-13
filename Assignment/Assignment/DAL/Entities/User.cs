@@ -31,11 +31,11 @@ namespace Assignment.DAL.Entities
         [StringLength(50)]
         public string? ProductCode { get; set; }
 
-        [StringLength(100)]
-        public string? EmailAddress { get; set; }
-
         [Required]
         public int Age { get; set; }
+
+        [StringLength(100)]
+        public string? EmailAddress { get; set; }
 
     }
 }

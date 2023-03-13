@@ -10,6 +10,8 @@ using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
 using Hangfire;
+using Hangfire.Common;
+using Assignment.Extensions;
 
 namespace Assignment.Services.Implementations
 {
@@ -33,7 +35,9 @@ namespace Assignment.Services.Implementations
             if(user != null)
             {
                 var template = await _templateRepository.GetHtmlTemplateByCreatedUserAsync(Convert.ToString(user.Id));
-                var content = ContentSetter(template, user);
+
+                //Setting Content using Extension Method
+                var content = template.SetContent(user);
 
                 var document =  await CreateDocument(content, user);
 
@@ -41,9 +45,10 @@ namespace Assignment.Services.Implementations
 
                 if(result > 0 && document.Content != null && user.EmailAddress != null) {
 
-                    RecurringJob.AddOrUpdate(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress), Cron.Weekly(DayOfWeek.Monday, 2, 30));
 
-                    //BackgroundJob.Enqueue(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress));
+                    //RecurringJob.AddOrUpdate(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress), Cron.Weekly(DayOfWeek.Monday, 2, 30));
+
+                    BackgroundJob.Enqueue(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress));
 
                     //await sendEmailAsync(document.Content, user.Name, user.EmailAddress);
                 }
@@ -69,27 +74,6 @@ namespace Assignment.Services.Implementations
             });
 
             return pdfContent;
-        }
-
-        private static string ContentSetter(HtmlTemplate template, User user)
-        {
-            string content = null;
-            if (template != null && template.Content != null)
-            {
-                content = template.Content;
-                content = content.Replace("{{Name}}", user.Name);
-                content = content.Replace("{{Age}}", Convert.ToString(user.Age));
-                content = content.Replace("{{Salary}}", Convert.ToString(user.Salary));
-                content = content.Replace("{{Occupation}}", user.Occupation);
-                content = content.Replace("{{ProductCode}}", user.ProductCode);
-                content = content.Replace("{{PolicyExpiryDate}}", Convert.ToString(user.PolicyExpiryDate));
-                content = content.Replace("{{PolicyNumber}}", Convert.ToString(user.PolicyNumber));
-
-                return content;
-            }
-
-            return content;
-
         }
 
         private static async Task<Document> CreateDocument(string content, User user)
@@ -134,6 +118,7 @@ namespace Assignment.Services.Implementations
             return 0;
         }
 
+        
         public async Task sendEmailAsync(byte[] attachment, string name, string email)
         {
             var message = new MimeMessage();
@@ -163,6 +148,26 @@ namespace Assignment.Services.Implementations
             smtpClient.Disconnect(true);
         }
 
+        //private static string ContentSetter(HtmlTemplate template, User user)
+        //{
+        //    string content = null;
+        //    if (template != null && template.Content != null)
+        //    {
+        //        content = template.Content;
+        //        content = content.Replace("{{Name}}", user.Name);
+        //        content = content.Replace("{{Age}}", Convert.ToString(user.Age));
+        //        content = content.Replace("{{Salary}}", Convert.ToString(user.Salary));
+        //        content = content.Replace("{{Occupation}}", user.Occupation);
+        //        content = content.Replace("{{ProductCode}}", user.ProductCode);
+        //        content = content.Replace("{{PolicyExpiryDate}}", Convert.ToString(user.PolicyExpiryDate));
+        //        content = content.Replace("{{PolicyNumber}}", Convert.ToString(user.PolicyNumber));
 
+        //        return content;
+        //    }
+
+
+        //    return content;
+
+        //}
     }
 }
