@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hhgR7/qZpljI+4BrI74RksN/cmsltuwBS4Pws07L0fzQafWeFdNm+INeDcEhwhEkBlJ7Kzye1XACgPV0sIyKSw==",
+  "dgSpecHash": "WFBRQ3RGQNUr8RoE7E4OS0ZaJj69mUoHTJ/tF4o//VasxaoKxTrYlbGUY75WrofK1ZRiE7JSTicUrNIwM8K9UA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\abhad\\source\\repos\\RemoteState-Assignment\\Assignment\\Assignment\\Assignment.csproj",
+  "projectFilePath": "C:\\Users\\abhad\\source\\repos\\RemoteState-Assignment\\AssignmentJWT\\Assignment\\Assignment\\Assignment.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\abhad\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\abhad\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
