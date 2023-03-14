@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //Configure Hangfire
-GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 5, DelaysInSeconds = new int[] { 30 }, OnAttemptsExceeded = AttemptsExceededAction.Delete });
+//GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 5, DelaysInSeconds = new int[] { 30 }, OnAttemptsExceeded = AttemptsExceededAction.Delete });
 
 
 app.UseHangfireDashboard();

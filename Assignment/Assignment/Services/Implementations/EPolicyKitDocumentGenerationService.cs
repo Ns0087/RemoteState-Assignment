@@ -13,6 +13,7 @@ using Hangfire;
 using Hangfire.Common;
 using Assignment.Extensions;
 
+
 namespace Assignment.Services.Implementations
 {
     public class EPolicyKitDocumentGenerationService : IEPolicyKitDocumentGenerationService
@@ -32,25 +33,24 @@ namespace Assignment.Services.Implementations
         {
             int result = 0;
             var user = await _userRepository.GetUserByDetailsAsync(details);
-            if(user != null)
+            if (user != null)
             {
                 var template = await _templateRepository.GetHtmlTemplateByCreatedUserAsync(Convert.ToString(user.Id));
 
                 //Setting Content using Extension Method
                 var content = template.SetContent(user);
 
-                var document =  await CreateDocument(content, user);
+                var document = await CreateDocument(content, user);
 
-                result =  await AddDocument(document);
+                result = await AddDocument(document);
 
-                if(result > 0 && document.Content != null && user.EmailAddress != null) {
+                if (result > 0 && document.Content != null && user.EmailAddress != null)
+                {
 
+                    RecurringJob.AddOrUpdate(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress), "30 2 * * 1");
 
-                    //RecurringJob.AddOrUpdate(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress), Cron.Weekly(DayOfWeek.Monday, 2, 30));
+                    //var jobID = BackgroundJob.Enqueue(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress));
 
-                    BackgroundJob.Enqueue(() => sendEmailAsync(document.Content, user.Name, user.EmailAddress));
-
-                    //await sendEmailAsync(document.Content, user.Name, user.EmailAddress);
                 }
             }
 
@@ -78,7 +78,7 @@ namespace Assignment.Services.Implementations
 
         private static async Task<Document> CreateDocument(string content, User user)
         {
-            if(content != null)
+            if (content != null)
             {
                 Document document = new Document()
                 {
@@ -96,7 +96,7 @@ namespace Assignment.Services.Implementations
 
                 return document;
             }
-            
+
             return new Document();
         }
 
@@ -118,11 +118,11 @@ namespace Assignment.Services.Implementations
             return 0;
         }
 
-        
+        [AutomaticRetry(Attempts = 2)]
         public async Task sendEmailAsync(byte[] attachment, string name, string email)
         {
             var message = new MimeMessage();
-            message.From.Add( new MailboxAddress("Nitin", "mrwanderer30@gmail.com"));
+            message.From.Add(new MailboxAddress("Nitin", "aaryanjess@gmail.com"));
             message.To.Add(new MailboxAddress(name, email));
 
             message.Subject = "Health Policy";
@@ -140,12 +140,13 @@ namespace Assignment.Services.Implementations
 
             message.Body = bodyBuilder.ToMessageBody();
 
-            SmtpClient smtpClient= new SmtpClient();
+            SmtpClient smtpClient = new SmtpClient();
             smtpClient.Connect("smtp.gmail.com", 587, false);
-            smtpClient.Authenticate("mrwanderer30@gmail.com", "htmhwsrrzwodaifq");
+            smtpClient.Authenticate("aaryanjess@gmail.com", "gfyadalqnokbrhvv");
             var res = await smtpClient.SendAsync(message);
             await Console.Out.WriteLineAsync(res);
             smtpClient.Disconnect(true);
+
         }
 
         //private static string ContentSetter(HtmlTemplate template, User user)
